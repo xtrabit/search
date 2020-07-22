@@ -3,25 +3,15 @@ var list = require('./product_list.json').products;
 
 var threshold = 2;
 var searchWords = process.argv.slice(2).join(' ');
-if (!searchWords.length) return;
-// var searchWords = 'coca cola';
-// var searchWords = 'zblah zmantra juice';
-// var searchWords = 'blah mantra juice';
-// var searchWords = 'mikl chocolate syrup biscuit';
-// var searchWords = 'mikl chocolate syrup';
-// var searchWords = 'mikl choc syru';
-// var searchWords = 'whole wheet flor';
-// var searchWords = 'magi masal mix milk';
-// var searchWords = 'magi masa mix';
-// var searchWords = 'magi masa noodle';
-// var searchWords = 'magi masal no garlic';
-// var searchWords = 'magi masal onion';
-// var searchWords = 'magi masal';
-// var searchWords = 'magi';
+if (!searchWords.length) {
+	console.log('\033[31mNo search string was passed.');
+	return;
+}
 console.log('-------------------------------------------------------------------------------------------------------------------------')
 console.log(searchWords);
 console.log('-------------------------------------------------------------------------------------------------------------------------')
 console.time('time')
+
 searchWords = searchWords.replace(/[^A-Za-z&'']/g, ' ').trim().toLowerCase().split(/\s+/);
 var results = [];
 for (var i = 0; i < searchWords.length; i++) {
@@ -63,7 +53,6 @@ for (var item of list) {
 		results[searchWords.length - matchCount].push(found_item);
 	}
 }
-
 var result = [];
 for (var i = 0; i < results.length; i++) {
 	if (results[i].length) {
@@ -76,7 +65,6 @@ result.sort(({similarity: a}, {similarity: b}) => {
 	if (a < b) return -1;
 	return 0;
 })
-
 console.timeEnd('time');
 console.log();
 for (var res of result) {
@@ -84,7 +72,7 @@ for (var res of result) {
 }
 console.log('\nRESULTS:');
 for (var i = 0; i < results.length; i++) {
-	console.log(i, results[i].length)
+	console.log('index:', i, 'qty:', results[i].length)
 }
 
 function scoreStrings(search, word) {
@@ -147,14 +135,3 @@ function scoreStrings(search, word) {
 	}
 	return distance + (mismatch ? 1 : 0);
 }
-
-
-// if (0) {
-// 	console.log()
-// 	var source = 'mini';
-// 	var target = 'milk';
-// 	console.log(source, '-', target)
-// 	console.log('SCORE      ', levenshtein.get(source, target));
-// 	console.log('LENGTH DIFF', Math.abs(source.length - target.length));
-// 	console.log('LENGTH %   ', (Math.min(source.length, target.length) / Math.max(source.length, target.length)).toFixed(2))
-// }
